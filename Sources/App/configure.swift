@@ -12,15 +12,21 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     try routes(router)
     services.register(router, as: Router.self)
     
-    try services.register(MySQLProvider())
     
-    let mysqlConfig = MySQLDatabaseConfig(hostname: "localhost", username: "root", password: "0")
+    
+    try services.register(MySQLProvider())
+    /// mysql
+    let mysqlConfig = MySQLDatabaseConfig(hostname: "localhost", username: "root", password: "**", transport: .unverifiedTLS)
     let mysql = MySQLDatabase(config: mysqlConfig)
     var config = DatabasesConfig()
     config.add(database: mysql, as: .mysql)
     services.register(config)
     
-    try router.register(collection: TestController())
+    
+//    try router.register(collection: TestController())
+    try router.register(collection: UserController())
+    try router.register(collection: MySQLController())
+    
     
     /// Register middleware
     var middlewares = MiddlewareConfig() // Create _empty_ middleware config
