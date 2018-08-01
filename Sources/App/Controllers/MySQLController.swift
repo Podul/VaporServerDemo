@@ -9,16 +9,32 @@ import Vapor
 import MySQL
 
 
+struct LoginRequest: Content {
+    var email: String?
+    var password: String?
+}
+
+
 class MySQLController: RouteCollection {
     func boot(router: Router) throws {
-        /*
-        router1.post("mysql") { req in
-            return req.withPooledConnection(to: .mysql, closure: self.connect)
-        }
-        */
+        
+//        router.post("testPost") { req in
+//            return "hello world"
+//            return "\(req.content)"
+//            return try req.content.decode(LoginRequest.self).map({ loginReq in
+//                print(loginReq.email ?? "email")
+//                print(loginReq.password ?? "password")
+//                return HTTPStatus.ok
+//            })
+//        }
+        createMySQL(router: router)
+        
+        test(router: router)
+        
         
         router.post("mysql") { (req) -> Future<String> in
             return req.withPooledConnection(to: .mysql) { (conn) in
+//                req.content.decod
                 let que = conn.query("select * from test")
                 let title = que.map { rows -> String in
                     var arr = Array<Any>()
@@ -42,6 +58,25 @@ class MySQLController: RouteCollection {
                 
                 return title
             }
+        }
+    }
+    
+    func createMySQL(router: Router) {
+        router.post("create") { (req) in
+            
+            return "qq"
+        }
+        
+    }
+    
+    // 这样可以取到传过来的参数
+    func test(router: Router) {
+        router.post("test") { req -> Future<String> in
+            let data = try req.content.decode(LoginRequest.self)
+            let da = data.map({ (login) -> String in
+                return login.email ?? "email"
+            })
+            return da
         }
     }
     /*

@@ -19,19 +19,38 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     let mysqlConfig = MySQLDatabaseConfig(hostname: "localhost", username: "root", password: "**", transport: .unverifiedTLS)
     let mysql = MySQLDatabase(config: mysqlConfig)
     var config = DatabasesConfig()
+//    config.add
     config.add(database: mysql, as: .mysql)
+    
     services.register(config)
+    
+    
+    // 配置全局json编码器
+//    var contentConfig = ContentConfig.default()
+//    let json = JSONEncoder()
+//    let jsonDe = JSONDecoder()
+//    
+//    json.dateEncodingStrategy = .millisecondsSince1970
+//    contentConfig.use(encoder: json, for: .xml)
+//    contentConfig.use(decoder: jsonDe, for: .xml)
+//    services.register(contentConfig)
+//    HTTPMessageDecoder()
     
     
 //    try router.register(collection: TestController())
     try router.register(collection: UserController())
     try router.register(collection: MySQLController())
-    
+    try router.register(collection: JSONController())
     
     /// Register middleware
     var middlewares = MiddlewareConfig() // Create _empty_ middleware config
-    /// middlewares.use(FileMiddleware.self) // Serves files from `Public/` directory
+        
+        // 文件！！！
+    middlewares.use(FileMiddleware.self) // Serves files from `Public/` directory
     middlewares.use(ErrorMiddleware.self) // Catches errors and converts to HTTP response
+//    PlaintextRenderer
+//    ViewRenderer
+
     services.register(middlewares)
 
     // Configure a SQLite database
