@@ -6,19 +6,16 @@ public func routes(_ router: Router) throws {
 //    Request
     router.get("hello") { req in
 //        print(req.description)
-        return """
-        <!DOCTYPE html>
-            <html>
-                <body>
-                    <h1>Hello World!</h1>
-                </body>
-            </html>
-        """
+        return "hello"
     }
     
     
+    try router.register(collection: UserController())
+    try router.register(collection: MySQLController())
+    try router.register(collection: JSONController())
+    try router.register(collection: SQLiteController())
     
-//    router.get(<#T##path: PathComponentsRepresentable...##PathComponentsRepresentable#>, use: <#T##(Request) throws -> ResponseEncodable#>)
+
     // Example of configuring a controller
     let todoController = TodoController()
     router.get("todos", use: todoController.index)

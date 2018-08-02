@@ -6,6 +6,7 @@ public func app(_ env: Environment) throws -> Application {
     var env = env
     var services = Services.default()
     
+    // 改端口等信息
     let con = NIOServerConfig.default(port: 8080)
     services.register(con)
     
