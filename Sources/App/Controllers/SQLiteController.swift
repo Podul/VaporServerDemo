@@ -13,10 +13,13 @@ final class UserInfos: Codable {
     var id: Int?
     var name: String
     var age: Int
+    var userID: User.ID
     
-    init(name: String, age: Int) {
+    
+    init(name: String, age: Int, userID: User.ID) {
         self.name = name
         self.age = age
+        self.userID = userID
     }
 }
 
@@ -24,6 +27,12 @@ extension UserInfos: SQLiteModel {}
 extension UserInfos: Content {}
 extension UserInfos: Migration {}
 extension UserInfos: Parameter {}
+
+extension UserInfos {
+    var user1: Parent<UserInfos, User> {
+        return parent(\.userID)
+    }
+}
 
 
 struct SQLiteController: RouteCollection {

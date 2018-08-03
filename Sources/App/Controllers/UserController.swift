@@ -9,13 +9,17 @@ import Vapor
 
 class UserController: RouteCollection {
     func boot(router: Router) throws {
-        router.get("user") { req in
-            return "\(req)"
-        }
-        
-        router.post("user") { req in
-            
-            return "\(req.parameters)"
-        }
+        let userGroup = router.grouped("api", "user")
+        userGroup.post(use: createUser)
+        userGroup.get(use: getAllUsers)
+    }
+    
+    func createUser(_ req: Request) throws -> Future<User> {
+        let user = try req.content.decode(User.self)
+        return user.save(on: req)
+    }
+    
+    func getAllUsers(_ req: Request) throws -> Future<[User]> {
+        return User.query(on: req).all()
     }
 }
