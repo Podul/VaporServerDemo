@@ -12,6 +12,7 @@ class UserController: RouteCollection {
         let userGroup = router.grouped("api", "user")
         userGroup.post(use: createUser)
         userGroup.get(use: getAllUsers)
+        userGroup.get("infos", use: getUserInfos)
     }
     
     func createUser(_ req: Request) throws -> Future<User> {
@@ -21,5 +22,11 @@ class UserController: RouteCollection {
     
     func getAllUsers(_ req: Request) throws -> Future<[User]> {
         return User.query(on: req).all()
+    }
+    
+    func getUserInfos(_ req: Request) throws -> Future<[UserInfos]> {
+        return try req.parameters.next(User.self).flatMap(to: [UserInfos].self, { (user) in
+            return try user.info.query(on: req).all()
+        })
     }
 }

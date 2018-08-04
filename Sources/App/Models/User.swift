@@ -22,3 +22,11 @@ final class User: Codable {
 extension User: SQLiteUUIDModel {}
 extension User: Content {}
 extension User: Migration {}
+extension User: Parameter {}
+
+extension User {
+    var info: Children<User, UserInfos> {
+        return children(\.userID)
+    }
+    
+}

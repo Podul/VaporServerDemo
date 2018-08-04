@@ -29,7 +29,7 @@ extension UserInfos: Migration {}
 extension UserInfos: Parameter {}
 
 extension UserInfos {
-    var user1: Parent<UserInfos, User> {
+    var user: Parent<UserInfos, User> {
         return parent(\.userID)
     }
 }
@@ -45,6 +45,7 @@ struct SQLiteController: RouteCollection {
         
         group.delete(UserInfos.parameter, use: deleteInfo)
         group.put(UserInfos.parameter, use: updateInfo)
+        group.get("user1", use: getUser)
     }
     
     /// 获取所有
@@ -77,5 +78,11 @@ struct SQLiteController: RouteCollection {
             info.age = updateInfo.age
             return info.save(on: req)
         }
+    }
+    
+    func getUser(_ req: Request) throws -> Future<User> {
+        return try req.parameters.next(UserInfos.self).flatMap(to: User.self, { (info) in
+            return info.user.get(on: req)
+        })
     }
 }
