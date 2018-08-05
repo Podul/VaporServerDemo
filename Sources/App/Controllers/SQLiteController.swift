@@ -50,6 +50,10 @@ struct SQLiteController: RouteCollection {
     
     /// 获取所有
     func getAllInfos(_ req: Request) throws -> Future<[UserInfos]> {
+//        let aaa = UserInfos.query(on: req)
+//        aaa.connection.map { (conn) in
+////            conn.query(SQLiteQuery, <#T##onRow: ([SQLiteColumn : SQLiteData]) throws -> ()##([SQLiteColumn : SQLiteData]) throws -> ()#>)
+//        }
         return UserInfos.query(on: req).all()
     }
     

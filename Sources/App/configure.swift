@@ -15,14 +15,12 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     
     
     try services.register(MySQLProvider())
-    /// mysql
-    let mysqlConfig = MySQLDatabaseConfig(hostname: "localhost", username: "root", password: "**", transport: .unverifiedTLS)
-    let mysql = MySQLDatabase(config: mysqlConfig)
-    var config = DatabasesConfig()
-//    config.add
-    config.add(database: mysql, as: .mysql)
-    
-    services.register(config)
+
+//    var config = DatabasesConfig()
+////    config.add
+//    config.add(database: mysql, as: .mysql)
+//
+//    services.register(config)
     
     
     // 配置全局json编码器
@@ -52,10 +50,15 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     // Configure a SQLite database
     let sqlite = try SQLiteDatabase(storage: .memory)
+    
+    /// mysql
+    let mysqlConfig = MySQLDatabaseConfig(hostname: "localhost", username: "root", password: "Yang19960508" , transport: .unverifiedTLS)
+    let mysql = MySQLDatabase(config: mysqlConfig)
 
     /// Register the configured SQLite database to the database config.
     var databases = DatabasesConfig()
     databases.add(database: sqlite, as: .sqlite)
+    databases.add(database: mysql, as: .mysql)
     services.register(databases)
 
     /// Configure migrations
@@ -63,6 +66,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 //    migrations.add(model: Todo.self, database: .sqlite)
     migrations.add(model: UserInfos.self, database: .sqlite)
     migrations.add(model: User.self, database: .sqlite)
+    migrations.add(model: LoginRequest.self, database: .mysql)
     services.register(migrations)
 
 }
